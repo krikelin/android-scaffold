@@ -1,0 +1,86 @@
+package {{package}};
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import {{package}}.db.DatabaseHelper;
+import android.widget.EditText;
+import android.widget.DatePicker;
+import {{package}}.models.{{Model}};
+public class {{Model}}Activity extends Activity {
+	
+	public AsyncTask<String, {{Model}}, String> task = new AsyncTask<String, {{Model}}, String>() {
+		@Override
+		public String doInBackground({{Model}}... params) {
+			Model item = adapter.save(params);
+			return items;
+		}
+		@Override
+		public void onPostExecute(ArrayList<{{Model}}> items) {
+			pb.cancel();
+			if(items == null) 
+				return;
+			{{Model}}ListAdapter adapter = new {{Model}}ListAdapter({{Model}}Editor.this, 0, items);
+			
+			setListAdapter(adapter);
+			
+		}
+	};
+	ProgressDialog pb;
+	public {{Model}}Adapter adapter;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		adapter = new {{Model}}SQLAdapter(this, "a", null, 1);
+		// TODO Auto-generated method stub
+		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.edit_{{model}}.xml);
+		Button btnSave = (Button)findViewById(R.id.btnSave);
+		btnSave.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				pb = ProgressDialog.show(this, "Loading {{model}}s", "");
+				DatabaseHelper dh = new DatabaseHelper({{Model}}Editor.this, "{{databaseName}}", null, 1);
+				
+				{{Model}}Adapter adapter = new {{Model}}SQLAdapter(dh); // Create a new adapter if you wish
+				
+				{{Model}} data = new {{Model}}(ModelActivity.this);
+				adapter.save(data);
+				
+			}
+		});
+		if(getIntent().hasExtra("id")) {
+			{{Model}}Adapter adapter = new {{Model}}SQLAdapter(dh); // Create a new adapter if you wish
+				
+			int id = getIntent().getIntExtra("id");
+			{{Model}} data = new adapter.get{{Model}}ByIdentifier(id);
+			{{#each fields}}
+			{{#ifCond type 1}}
+			EditText et = (EditText)activity.findViewById(R.id.tv{{Field}});
+			et.setText(data.{{name}});
+			{{/ifCond}}
+			{{#ifCond type 2}}
+			EditText et = (EditText)activity.findViewById(R.id.tv{{Field}});
+			et.setText(this.{{name}});
+			{{/ifCond}}
+			{{#ifCond type 3}}
+			DatePicker dp = (DatePicker)activity.findViewById(R.id.tv{{Field}});
+			
+			dp.setMonth(this.{{name}}.getMonth());
+			dp.setYear(this.{{name}}.getYear());
+			dp.setDayOfMonth(this.{{name}}.getDayOfMonth());
+			
+					
+			{{/ifCond}}
+			{{/each}}
+		}
+	}
+	
+}

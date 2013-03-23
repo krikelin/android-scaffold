@@ -1,0 +1,19 @@
+package {{package}}.models;
+import {{package}}.models.{{Model}}
+import java.util.ArrayList;
+
+public interface {{Model}}Adapter {
+	/**
+	 * Loads items. This should be run on another thread
+	 */
+	public ArrayList<{{Model}}> load(String... arguments);
+	/**
+	 * Get model by identifier
+	 * @param id
+	 * @return
+	 */
+	public {{Model}} get{{Model}}ByIdentifier(int id);
+	
+	public void save{{Model}}({{Model}} model);
+	public void delete{{Model}}({{Model}} model);
+}

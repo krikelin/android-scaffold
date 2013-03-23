@@ -1,0 +1,30 @@
+package {{package}}.db.DatabaseHelper;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class ModelDatabase extends SQLiteOpenHelper {
+
+	public ModelDatabase(Context context, String name, CursorFactory factory,
+			int version) {
+		super(context, name, factory, version);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+		{{#each models}}
+		String sql = "CREATE TABLE {{name}} (_id primary key integer not null autincrement, {{#each fields}}, {{name}} {{typeName}}{{/end}})";
+		{{/each}}
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

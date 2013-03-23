@@ -1,0 +1,77 @@
+package {{package}}.models;
+
+import {{package}}.db.DatabaseHelper;
+import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+
+import java.util.Date;
+
+public class {{Model}} {
+	/**
+	Creates a new {{model}} based on the fields in the activity
+	**/
+	public {{Model}} (Activity activity) {
+	
+		{{#each fields}}
+		{{#ifCond type 1}}
+		EditText et = (EditText)activity.findViewById(R.id.tv{{Name}});
+		this.{{field}} = et.getText().toString();
+		{{/ifCond}}
+		{{#ifCond type 2}}
+		EditText et = (EditText)activity.findViewById(R.id.tv{{Name}});
+		this.{{field}} = et.getText().toString();
+		{{/ifCond}}
+		{{#ifCond type 3}}
+		DatePicker dp = (DatePicker)activity.findViewById(R.id.tv{{Name}});
+		
+		int day = dp.getDayOfMonth();
+		int year = dp.getYear();
+		int month = dp.getMonth();
+		Date date = new Date(year, month, day);
+				
+		this.{{field}} = new Date(year, month, day);
+		{{/ifCond}}
+		{{/each}}
+		
+		// If we have an id take it
+		if (this.getIntent().hasExtra("id")) {
+			this.id = this.getIntent().getIntExtra("id");
+		}
+	}
+	private int id = -1;
+	
+	{{#each fields}}
+	private {{typeName}} {{field}};
+	public {{typeName}} get{{Field}} () {
+		return this.{{field}};
+	}
+	public {{typeName}} set{{Field}} ({{typeName}} {{field}}) {
+		this.{{field}} = {{field}};
+	}
+	{{/each}}
+	
+	/**
+	Create an instance of {{model}} from this cursor
+	**/
+	public {{Model}} (Cursor cursor) {
+		this.id = cursor.getInt(cursor.getColumnIndex("_id")); // Get id
+		int index = 0;
+		{{#each fields}}
+		index = cursor.getColumnIndex("{{name}}");
+		{{#ifCond type 1}}
+		this.{{name}} = ({{typeName}})cursor.getString(index);
+		{{/ifCond}}
+		{{#ifCond type 2}}
+		this.{{name}} = ({{typeName}})cursor.getInt(index);
+		{{/ifCond}}
+		{{#ifCond type 3}}
+		this.{{name}} = ({{typeName}})new Date(cursor.getLong(index));
+		{{/ifCond}}
+		{{/each}}
+	}
+}

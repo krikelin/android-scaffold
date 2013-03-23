@@ -1,0 +1,59 @@
+package {{package}};
+
+import java.util.ArrayList;
+
+import android.app.Service;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import {{package}}.models.{{Model}};
+public class {{Model}}ListAdapter extends ArrayAdapter<{{Model}}> {
+
+	private ArrayList<{{Model}}> {{Model}}s;
+	public ModelListAdapter(Context context, int textViewResourceId, ArrayList<{{Model}}> {{Model}}s) {
+		super(context, textViewResourceId);
+		// TODO Auto-generated constructor stub
+		this.{{Model}}s = {{Model}}s;
+	}
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return {{Model}}s.size();
+	}
+	@Override
+	public {{Model}} getItem(int position) {
+		// TODO Auto-generated method stub
+		return {{Model}}s.get(position);
+	}
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return {{Model}}s.get(position).getId();
+	}
+	@Override
+	public int getPosition({{Model}} item) {
+		// TODO Auto-generated method stub
+		return {{Model}}s.indexOf(item);
+	}
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		if(convertView == null) {
+			LayoutInflater li = (LayoutInflater)getContext().getSystemService(Service.LAYOUT_INFLATER_SERVICE);
+			convertView = li.inflate(R.layout.{{Model}}_item, null);
+			
+		}
+		{{#each fields}}
+		{{#ifCond type 1}}
+		TextView tv = (TextView)convertView.findViewById(R.id.tv{{Name}});
+		tv.setText(getItem(position).get{{Name}});
+		{{/ifCond}}
+		{{/each}}
+		
+		return super.getView(position, convertView, parent);
+	}
+	
+
+}

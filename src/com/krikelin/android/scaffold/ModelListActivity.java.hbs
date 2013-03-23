@@ -1,0 +1,48 @@
+package {{package}};
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.widget.Button;
+import {{package}}.db.DatabaseHelper;
+import android.widget.EditText;
+import android.widget.DatePicker;
+import {{package}}.models.{{Model}};
+import android.widget.AdapterView.OnItemClickListener;
+public class {{Model}}Editor extends ListActivity {
+	public AsyncTask<String, String, List<{{Model}}>> task = new AsyncTask<String, List<{{Model}}>>() {
+		@Override
+		public List<{{Model}}> doInBackground(String... params) {
+			ArrayList<{{Mode}}> items = adapter.load(params);
+			return items;
+		}
+		@Override
+		public void onPostExecute(List<{{Model}}> items) {
+			setContentView(R.layout.{{model}}_list);
+		
+			if(items == null) 
+				return;
+			
+			{{Model}}ListAdapter adapter = new {{Model}}ListAdapter({{Model}}Editor.this, 0, items);
+			
+			setListAdapter(adapter);
+			
+		}
+	};
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		setContentView(R.layout.{{model}}_wait);
+		getListAdapter().setOnItemClickListener(new AdapterView.OnItemClickListener () {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent i = new Intent({{Model}}ListActivity.this, {{Model}}Activity.class);
+				i.putIntegerExtra("id", id);
+				startActivity(i);
+			}
+		});
+		task.execute();
+	}

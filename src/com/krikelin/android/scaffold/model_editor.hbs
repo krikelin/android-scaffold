@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+	<ScrollView
+    	android:layout_weight="1"
+	    android:layout_width="0dip"
+	    android:layout_height="match_parent">
+		 <LinearLayout   android:layout_width="match_parent"
+		    android:layout_height="wrap_content"  android:orientation="vertical" >
+    
+		    {{#each fields}}
+		    {{#ifCond type = 1}}
+		    <EditText android:id="@+id/tv{{Name}}"  android:inputType="text"
+		        android:layout_width="match_parent" 
+		        android:layout_height="wrap_content" />
+		    {{/ifCond}}
+		    {{#ifCond type 2}}
+		    <EditText android:id="@+id/tv{{Name}}"  android:inputType="number"
+		        android:layout_width="match_parent" 
+		        android:layout_height="wrap_content" />
+		    {{/ifCond}}
+		    
+		    {{#ifCond type 3}}
+		    <DatePicker android:id="@+id/tv{{Name}}" android:layout_width="match_parent" android:layout_height="wrap_content" />
+			
+			{{/ifCond}}
+			</LinearLayout>
+		</ScrollView>
+	<LinearLayout
+	    android:style="?android:attr/panelColorBackground"
+	    android:layout_gravity="center"
+	    android:id="@+id/footer">
+	    <Button android:id="@+id/btnSave" 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/save" />
+	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,90 @@
+package {{package}}.models;
+import {{package}}.models.{{Model}}
+import {{package}}.db.DatabaseHelper;
+import java.util.ArrayList;
+
+public class {{Model}}SQLAdapter extends ModelAdapter {
+	public {{Model}}SQLAdapter (DatabaseHelper helper) {
+		this.helper = helper;
+	}
+	/**
+	 * Loads items. This should be run on another thread
+	 */
+	public ArrayList<{{Model}}> load(String... arguments) {
+		// The developer has to modify the query to match the arguments.
+		SQLiteDatabase db;
+		String sql = "SELECT * FROM {{model}} ORDER BY _id DESC";
+		
+		ArrayList<Object> values = new ArrayList<Object>();
+		{{#each fields}}
+		values.add(this.{{field}});
+		{{/each}}
+		try {
+			db = helper.getReadableDatabase().open();
+			Cursor cursor = db.query("{{model}}", null, null, null, null, null,"_id DESC");
+			{{Model}} result = new {{Model}}(cursor);
+			db.close();
+			return result;                          
+		} catch (Exception e) {
+			db.close();
+		}	
+	}
+	/**
+	 * Get model by identifier
+	 * @param id
+	 * @return
+	 */
+	public {{Model}} get{{Model}}ByIdentifier(int id) {
+		SQLiteDatabase db;
+		String sql = "SELECT * FROM {{model}} WHERE _id = " + String.valueOf(id);
+		
+		ArrayList<Object> values = new ArrayList<Object>();
+		{{#each fields}}
+		values.add(this.{{field}});
+		{{/each}}
+		try {
+			db = helper.getReadableDatabase();
+			db.open();
+			Cursor cursor =  db.query("{{model}}", null, "_id = ?", new String[] {id}, null, null, "_id DESC");
+			{{Model}} result = new {{Model}}(cursor);
+			db.close();
+			return result;                          
+		} catch (Exception e) {
+			helper.close();
+		}	
+	}
+	
+	public void save{{Model}}({{Model}} model) {
+		SQLiteDatabase db;
+		String sql = "INSERT INTO {{model}} (id{{#each field}}, {{typeName}}{{/each}})  (?{{#each field}}, ?{{/end}})";
+		if(id > -1)
+			sql = "UPDATE {{model}} SET _id = _id{{#each field}}, {{name}} = ?{{/each}} WHERE id = " + String.valueOf(id);
+		
+		ArrayList<Object> values = new ArrayList<Object>();
+		{{#each fields}}
+		values.add(this.{{field}});
+		{{/each}}
+		try {
+			db = helper.getWritableDatabsae();
+			db.open();
+			db.execSQL(sql, values.toArray());
+			db.close();
+		} catch (Exception e) {
+			db.close();
+		}	
+	}
+	public void delete{{Model}}({{Model}} model) {
+		SQLiteDatabase db;
+		
+		String sql = "DELETE FROM {{model}} WHERE _id = ?";
+		try {
+			db = helper.getWritableDatabase();
+			db.open();
+			db.execSQL(sql, new Object[] { model.getId()});
+			db.close();
+		} catch (Exception e) {
+			db.close();
+		}
+	}
+}
+
