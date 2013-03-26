@@ -23,16 +23,41 @@ public class Model {
 			String type = a.split(":")[1];
 			
 			com.krikelin.android.scaffold.Field field = new com.krikelin.android.scaffold.Field();
-			field.name = name.toLowerCase();
-			field.Name = capitalize(name);
-			field.NAME = name.toUpperCase();
+			field.setName(name.toLowerCase());
+			field.setName(capitalize(name));
+			field.setNAME(name.toUpperCase());
+			field.setTypeName(type);
 			fields.add(field);
 		}
 		this.fields = fields.toArray();
 	}
-	public Object[] fields;
-	public String _package;
-	public String MODEL = "";
-	public String Model = "";
-	public String model = "";
+	private Object[] fields;
+	public Object[] getFields() {
+		return fields;
+	}
+	public void setFields(Object[] fields) {
+		this.fields = fields;
+	}
+	public String getPackage() {
+		return _package;
+	}
+	public void setPackage(String _package) {
+		this._package = _package;
+	}
+	public String getMODEL() {
+		return MODEL;
+	}
+	public void setMODEL(String mODEL) {
+		MODEL = mODEL;
+	}
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
+	private String _package;
+	private String MODEL = "";
+	private String Model = "";
+	private String model = "";
 }

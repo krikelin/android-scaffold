@@ -1,6 +1,7 @@
+{{#with this}}
 package {{package}}.models;
 
-import {{package}}.db.DatabaseHelper;
+import {{this._package}}.db.DatabaseHelper;
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -75,3 +76,4 @@ public class {{Model}} {
 		{{/each}}
 	}
 }
+{{/with}}
